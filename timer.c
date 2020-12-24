@@ -71,7 +71,10 @@ sl_err_t timer_create_urge(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t 
  */
 sl_err_t  timer_delete(sl_uint8_t timer_id)
 {
+     if (timer_id >= TIMER_MAX_NUM )
+        return ERR_NOT_EXIST;
     timer_pool[timer_id].is_active = FALSE;
+    return  ERR_OK;
 }
 
 
