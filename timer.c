@@ -3,7 +3,7 @@
 
 typedef struct tiemr_
 {
-    sl_uint8_t is_active; // ÓĞĞ§
+    sl_uint8_t is_active; // æœ‰æ•ˆ
     sl_uint8_t run;        
     sl_uint32_t period;
     sl_uint8_t  timer_mode;
@@ -16,15 +16,14 @@ typedef struct tiemr_
 sl_tiemr timer_pool[TIMER_MAX_NUM];
 
 /**
- * @brief ´Ó¶¨Ê±Æ÷¶ÔÏó³ØÖĞ·µ»ØÒ»¸ö¿ÕÏĞµÄ¶¨Ê±Æ÷¶ÔÏó£¬²¢ÉèÖÃ¶¨Ê±Æ÷Ïà¹ØÊôĞÔ
+ * @brief ä»å®šæ—¶å™¨å¯¹è±¡æ± ä¸­è¿”å›ä¸€ä¸ªç©ºé—²çš„å®šæ—¶å™¨å¯¹è±¡ï¼Œå¹¶è®¾ç½®å®šæ—¶å™¨ç›¸å…³å±æ€§
  * 
- * @param timer_id  ÓÃÓÚ½ÓÊÕÉú³ÉµÄ¶¨Ê±Æ÷¶ÔÏóid
- * @param period    ¶¨Ê±Æ÷¶¨Ê±ÖÜÆÚ£¬ µ¥Î»ms 
- * @param timer_mode  ¶¨Ê±Æ÷Ä£Ê½ 0: ÖÜÆÚÑ­»·  1£ºµ¥´Î
- * @param cb        ¶¨Ê±Ê±¼äµ½´¥·¢µÄ»Øµ÷º¯Êı
+ * @param timer_id  ç”¨äºæ¥æ”¶ç”Ÿæˆçš„å®šæ—¶å™¨å¯¹è±¡id
+ * @param timer_mode  å®šæ—¶å™¨æ¨¡å¼ 0: å‘¨æœŸå¾ªç¯  1ï¼šå•æ¬¡
+ * @param cb        å®šæ—¶æ—¶é—´åˆ°è§¦å‘çš„å›è°ƒå‡½æ•°
  * @return sl_err_t 
  */
-sl_err_t timer_create(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t timer_mode, callback cb)
+sl_err_t timer_create(sl_uint8_t *timer_id,  sl_uint8_t timer_mode, callback cb)
 {
     int index = 0;
     while(timer_pool[index++].is_active && index <= TIMER_MAX_NUM);
@@ -33,8 +32,6 @@ sl_err_t timer_create(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t timer
         return ERR_FULL;
     timer_pool[index-1].is_active = TRUE;
     timer_pool[index-1].run  = FALSE;
-    timer_pool[index-1].period = period;
-    timer_pool[index-1].tick = period;
     timer_pool[index-1].timer_mode = timer_mode;
     timer_pool[index-1].cb = cb;
     timer_pool[index-1].timeoutflag = 0;
@@ -45,7 +42,7 @@ sl_err_t timer_create(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t timer
 
 
 
-sl_err_t timer_create_urge(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t timer_mode, callback cb)
+sl_err_t timer_create_urge(sl_uint8_t *timer_id, sl_uint8_t timer_mode, callback cb)
 {
     int index = 0;
     while(timer_pool[index++].is_active && index <= TIMER_MAX_NUM);
@@ -54,8 +51,7 @@ sl_err_t timer_create_urge(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t 
         return ERR_FULL;
     timer_pool[index-1].is_active = TRUE;
     timer_pool[index-1].run  = FALSE;
-    timer_pool[index-1].period = period/SL_SYS_TICK;
-    timer_pool[index-1].tick = period/SL_SYS_TICK;
+
     timer_pool[index-1].timer_mode = timer_mode;
     timer_pool[index-1].cb = cb;
     timer_pool[index-1].timeoutflag = 0;
@@ -64,10 +60,10 @@ sl_err_t timer_create_urge(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t 
     return ERR_OK; 
 }
 /**
- * @brief É¾³ıÖ¸¶¨idµÄ¶¨Ê±Æ÷¶ÔÏó
+ * @brief åˆ é™¤æŒ‡å®šidçš„å®šæ—¶å™¨å¯¹è±¡
  * 
- * @param timer_id ´ıÉ¾³ıµÄ¶¨Ê±Æ÷¶ÔÏóid
- * @return sl_err_t ³É¹¦: ERR_OK  Ê§°Ü£ºERR_NOT_EXIST --id ²»´æÔÚ
+ * @param timer_id å¾…åˆ é™¤çš„å®šæ—¶å™¨å¯¹è±¡id
+ * @return sl_err_t æˆåŠŸ: ERR_OK  å¤±è´¥ï¼šERR_NOT_EXIST --id ä¸å­˜åœ¨
  */
 sl_err_t  timer_delete(sl_uint8_t timer_id)
 {
@@ -78,11 +74,12 @@ sl_err_t  timer_delete(sl_uint8_t timer_id)
 }
 
 
-sl_err_t timer_start(sl_uint8_t timer_id)
+sl_err_t timer_start(sl_uint8_t timer_id, sl_uint32_t period)
 {
     if (timer_id >= TIMER_MAX_NUM )
         return ERR_NOT_EXIST;
-
+    timer_pool[timer_id].period = period/SL_SYS_TICK;
+    timer_pool[timer_id].tick = period/SL_SYS_TICK;
     timer_pool[timer_id].run = TRUE;
     return  ERR_OK;
 }
@@ -96,13 +93,6 @@ sl_err_t timer_reset(sl_uint8_t timer_id)
     return ERR_OK;
 }
 
-sl_err_t timer_set_period(sl_uint8_t timer_id, sl_uint32_t  period)
-{
-    if (timer_id >= TIMER_MAX_NUM )
-        return ERR_NOT_EXIST; 
-    timer_pool[timer_id].period = period;
-    return ERR_OK;
-}
 
 sl_err_t timer_stop(sl_uint8_t timer_id)
 {
@@ -115,7 +105,7 @@ sl_err_t timer_stop(sl_uint8_t timer_id)
 }
 
 /**
- * @brief ¶¨Ê±Æ÷¶ÔÏóµ±Ê±Ë¢ĞÂÈÎÎñ£¬ĞèÒª·ÅÔÚÏµÍ³¶¨Ê±ÖĞ¶ÏÖĞÖ´ĞĞ
+ * @brief å®šæ—¶å™¨å¯¹è±¡å½“æ—¶åˆ·æ–°ä»»åŠ¡ï¼Œéœ€è¦æ”¾åœ¨ç³»ç»Ÿå®šæ—¶ä¸­æ–­ä¸­æ‰§è¡Œ
  * 
  */
 void  timer_tick()
@@ -146,7 +136,7 @@ void  timer_tick()
 }
 
 /**
- * @brief ¶¨Ê±Æ÷ÈÎÎñÑ­»·£¬·ÅÔÚÖ÷Ñ­»·ÖĞµ÷ÓÃ£¬µ±¶¨Ê±Æ÷¶¨Ê±Ê±¼äµ½£¬»á×Ô¶¯´¥·¢¶ÔÓ¦µÄ¶¨Ê±Æ÷»Øµ÷º¯Êı
+ * @brief å®šæ—¶å™¨ä»»åŠ¡å¾ªç¯ï¼Œæ”¾åœ¨ä¸»å¾ªç¯ä¸­è°ƒç”¨ï¼Œå½“å®šæ—¶å™¨å®šæ—¶æ—¶é—´åˆ°ï¼Œä¼šè‡ªåŠ¨è§¦å‘å¯¹åº”çš„å®šæ—¶å™¨å›è°ƒå‡½æ•°
  * 
  */
 void  timer_task_loop()

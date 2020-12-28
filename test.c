@@ -34,10 +34,10 @@ int main(void)
 {
     unsigned int tick = 0;
     /** 1. 创建定时器 **/
-    timer_create(&timer_id, 2000, TIMER_MODE_CYCLE, print_hello);
+    timer_create(&timer_id, TIMER_MODE_CYCLE, print_hello);
 
     /** 2. 启动定时器 */
-    timer_start(timer_id);
+    timer_start(timer_id, 2000);
     while (run_flag)
     {
 

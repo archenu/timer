@@ -7,10 +7,10 @@
 /*** user interface ***/
 
 
-#define     SL_SYS_TICK         10   ///< ¸ù¾Ý×Ô¼ºµÄÏµÍ³Ê±ÖÓÖÜÆÚ¶ø¶¨£¬Ä¬ÈÏÎª10ms
-#define     TIMER_MAX_NUM       8    ///< ×î´ó¶¨Ê±Æ÷¸öÊý
-#define     TIMER_MODE_ONE_SHOT 1    ///< µ¥´Î´¥·¢£¬´¥·¢ºó¶¨Ê±Æ÷Í£Ö¹
-#define     TIMER_MODE_CYCLE    0    ///< ÖÜÆÚ´¥·¢
+#define     SL_SYS_TICK         10   ///< æ ¹æ®è‡ªå·±çš„ç³»ç»Ÿæ—¶é’Ÿå‘¨æœŸè€Œå®šï¼Œé»˜è®¤ä¸º10ms
+#define     TIMER_MAX_NUM       8    ///< æœ€å¤§å®šæ—¶å™¨ä¸ªæ•°
+#define     TIMER_MODE_ONE_SHOT 1    ///< å•æ¬¡è§¦å‘ï¼Œè§¦å‘åŽå®šæ—¶å™¨åœæ­¢
+#define     TIMER_MODE_CYCLE    0    ///< å‘¨æœŸè§¦å‘
 
 
 /*********end  interface ************/
@@ -19,89 +19,79 @@ typedef void (*callback)(void );
 
 
 /**
- * @brief ´Ó¶¨Ê±Æ÷¶ÔÏó³ØÖÐ·µ»ØÒ»¸ö¿ÕÏÐµÄ¶¨Ê±Æ÷¶ÔÏó£¬²¢ÉèÖÃ¶¨Ê±Æ÷Ïà¹ØÊôÐÔ
+ * @brief ä»Žå®šæ—¶å™¨å¯¹è±¡æ± ä¸­è¿”å›žä¸€ä¸ªç©ºé—²çš„å®šæ—¶å™¨å¯¹è±¡ï¼Œå¹¶è®¾ç½®å®šæ—¶å™¨ç›¸å…³å±žæ€§
  * 
- * @param timer_id  ÓÃÓÚ½ÓÊÕÉú³ÉµÄ¶¨Ê±Æ÷¶ÔÏóid
- * @param period    ¶¨Ê±Æ÷¶¨Ê±ÖÜÆÚ£¬ µ¥Î»ms 
- * @param timer_mode  ¶¨Ê±Æ÷Ä£Ê½ 0: ÖÜÆÚÑ­»·  1£ºµ¥´Î
- * @param cb        ¶¨Ê±Ê±¼äµ½´¥·¢µÄ»Øµ÷º¯Êý
- * @return sl_err_t ³É¹¦·µ»ØERR_OK,  Ê§°Ü·µ»ØERR_FULL, ¼´Ã»ÓÐ¶¨Ê±Æ÷×ÊÔ´£¬ÐèÒªÊÊµ±Ôö¼ÓTIMER_MAX_NUMÖµ
- * @note            ÓÃ´Ë½Ó¿Ú´´½¨µÄ¶¨Ê±ÈÎÎñ£¬»Øµ÷º¯Êý»áÔÚÖ÷Ñ­»·ÖÐÖ´ÐÐ£¬ÏìÓ¦ËÙ¶ÈÈ¡¾öÓÚÖ÷Ñ­»·µÄÊµÊ±ÐÔ£¬½ô¼±ÇÒ¼ò¶ÌµÄÈÎÎñ
- *                  ½¨ÒéÊ¹ÓÃ timer_create_urge ½Ó¿Úº¯Êý
+ * @param timer_id  ç”¨äºŽæŽ¥æ”¶ç”Ÿæˆçš„å®šæ—¶å™¨å¯¹è±¡id
+ * @param timer_mode  å®šæ—¶å™¨æ¨¡å¼ 0: å‘¨æœŸå¾ªçŽ¯  1ï¼šå•æ¬¡
+ * @param cb        å®šæ—¶æ—¶é—´åˆ°è§¦å‘çš„å›žè°ƒå‡½æ•°
+ * @return sl_err_t æˆåŠŸè¿”å›žERR_OK,  å¤±è´¥è¿”å›žERR_FULL, å³æ²¡æœ‰å®šæ—¶å™¨èµ„æºï¼Œéœ€è¦é€‚å½“å¢žåŠ TIMER_MAX_NUMå€¼
+ * @note            ç”¨æ­¤æŽ¥å£åˆ›å»ºçš„å®šæ—¶ä»»åŠ¡ï¼Œå›žè°ƒå‡½æ•°ä¼šåœ¨ä¸»å¾ªçŽ¯ä¸­æ‰§è¡Œï¼Œå“åº”é€Ÿåº¦å–å†³äºŽä¸»å¾ªçŽ¯çš„å®žæ—¶æ€§ï¼Œç´§æ€¥ä¸”ç®€çŸ­çš„ä»»åŠ¡
+ *                  å»ºè®®ä½¿ç”¨ timer_create_urge æŽ¥å£å‡½æ•°
  *              
  */
-sl_err_t timer_create(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t timer_mode, callback cb);
+sl_err_t timer_create(sl_uint8_t *timer_id, sl_uint8_t timer_mode, callback cb);
 
 
 /**
- * @brief ´Ó¶¨Ê±Æ÷¶ÔÏó³ØÖÐ·µ»ØÒ»¸ö¿ÕÏÐµÄ¶¨Ê±Æ÷¶ÔÏó£¬²¢ÉèÖÃ¶¨Ê±Æ÷Ïà¹ØÊôÐÔ
+ * @brief ä»Žå®šæ—¶å™¨å¯¹è±¡æ± ä¸­è¿”å›žä¸€ä¸ªç©ºé—²çš„å®šæ—¶å™¨å¯¹è±¡ï¼Œå¹¶è®¾ç½®å®šæ—¶å™¨ç›¸å…³å±žæ€§
  * 
- * @param timer_id  ÓÃÓÚ½ÓÊÕÉú³ÉµÄ¶¨Ê±Æ÷¶ÔÏóid
- * @param period    ¶¨Ê±Æ÷¶¨Ê±ÖÜÆÚ£¬ µ¥Î»ms 
- * @param timer_mode  ¶¨Ê±Æ÷Ä£Ê½ 0: ÖÜÆÚÑ­»·  1£ºµ¥´Î
- * @param cb        ¶¨Ê±Ê±¼äµ½´¥·¢µÄ»Øµ÷º¯Êý
- * @return sl_err_t ³É¹¦·µ»ØERR_OK,  Ê§°Ü·µ»ØERR_FULL, ¼´Ã»ÓÐ¶¨Ê±Æ÷×ÊÔ´£¬ÐèÒªÊÊµ±Ôö¼ÓTIMER_MAX_NUMÖµ
- * @note  ´Ë½Ó¿ÚºÍtimer_create ½Ó¿Úº¯ÊýµÄ²»Í¬Ö®´¦ÊÇ£º
- *        ÓÃ´Ëº¯Êý´´½¨µÄ¶¨Ê±Æ÷ÈÎÎñ¶ÔÏó£¬»Øµ÷º¯Êý»áÔÚÖÐ¶ÏÖÐÖ´ÐÐ£¬ËùÒÔ»Øµ÷º¯ÊýÓ¦¸Ã¼ò¶Ì£¬ÓÃÓÚ±È½Ï½ô¼±µÄ¶¨Ê±ÈÎÎñ
+ * @param timer_id  ç”¨äºŽæŽ¥æ”¶ç”Ÿæˆçš„å®šæ—¶å™¨å¯¹è±¡id
+ * @param timer_mode  å®šæ—¶å™¨æ¨¡å¼ 0: å‘¨æœŸå¾ªçŽ¯  1ï¼šå•æ¬¡
+ * @param cb        å®šæ—¶æ—¶é—´åˆ°è§¦å‘çš„å›žè°ƒå‡½æ•°
+ * @return sl_err_t æˆåŠŸè¿”å›žERR_OK,  å¤±è´¥è¿”å›žERR_FULL, å³æ²¡æœ‰å®šæ—¶å™¨èµ„æºï¼Œéœ€è¦é€‚å½“å¢žåŠ TIMER_MAX_NUMå€¼
+ * @note  æ­¤æŽ¥å£å’Œtimer_create æŽ¥å£å‡½æ•°çš„ä¸åŒä¹‹å¤„æ˜¯ï¼š
+ *        ç”¨æ­¤å‡½æ•°åˆ›å»ºçš„å®šæ—¶å™¨ä»»åŠ¡å¯¹è±¡ï¼Œå›žè°ƒå‡½æ•°ä¼šåœ¨ä¸­æ–­ä¸­æ‰§è¡Œï¼Œæ‰€ä»¥å›žè°ƒå‡½æ•°åº”è¯¥ç®€çŸ­ï¼Œç”¨äºŽæ¯”è¾ƒç´§æ€¥çš„å®šæ—¶ä»»åŠ¡
  */
-sl_err_t timer_create_urge(sl_uint8_t *timer_id, sl_uint32_t period, sl_uint8_t timer_mode, callback cb);
+sl_err_t timer_create_urge(sl_uint8_t *timer_id, sl_uint8_t timer_mode, callback cb);
 
 
 /**
- * @brief É¾³ýÖÆ¶¨idµÄ¶¨Ê±Æ÷¶ÔÏó
+ * @brief åˆ é™¤åˆ¶å®šidçš„å®šæ—¶å™¨å¯¹è±¡
  * 
- * @param timer_id ´ýÉ¾³ýµÄ¶¨Ê±Æ÷¶ÔÏóid
- * @return sl_err_t ³É¹¦: ERR_OK  Ê§°Ü£ºERR_NOT_EXIST --id ²»´æÔÚ
+ * @param timer_id å¾…åˆ é™¤çš„å®šæ—¶å™¨å¯¹è±¡id
+ * @return sl_err_t æˆåŠŸ: ERR_OK  å¤±è´¥ï¼šERR_NOT_EXIST --id ä¸å­˜åœ¨
  */
 sl_err_t  timer_delete(sl_uint8_t timer_id);
 
 
 /**
- * @brief Æô¶¯Ö¸¶¨id µÄ¶¨Ê±Æ÷¶ÔÏó
+ * @brief å¯åŠ¨æŒ‡å®šid çš„å®šæ—¶å™¨å¯¹è±¡
  * 
- * @param timer_id  ´ýÆô¶¯µÄ¶¨Ê±Æ÷¶ÔÏóid
- * @return sl_err_t ³É¹¦: ERR_OK  Ê§°Ü£ºERR_NOT_EXIST --id ²»´æÔÚ
+ * @param period    å®šæ—¶å™¨å®šæ—¶å‘¨æœŸï¼Œ å•ä½ms 
+ * @param timer_id  å¾…å¯åŠ¨çš„å®šæ—¶å™¨å¯¹è±¡id
+ * @return sl_err_t æˆåŠŸ: ERR_OK  å¤±è´¥ï¼šERR_NOT_EXIST --id ä¸å­˜åœ¨
  */
-sl_err_t timer_start(sl_uint8_t timer_id);
+sl_err_t timer_start(sl_uint8_t timer_id, sl_uint32_t period);
 
 
 /**
- * @brief  ÔÝÍ£Ö¸¶¨id µÄ¶¨Ê±Æ÷¶ÔÏó
+ * @brief  æš‚åœæŒ‡å®šid çš„å®šæ—¶å™¨å¯¹è±¡
  * 
- * @param timer_id ´ýÔÝÍ£µÄ¶¨Ê±Æ÷¶ÔÏóid
- * @return sl_err_t ³É¹¦: ERR_OK  Ê§°Ü£ºERR_NOT_EXIST --id ²»´æÔÚ
+ * @param timer_id å¾…æš‚åœçš„å®šæ—¶å™¨å¯¹è±¡id
+ * @return sl_err_t æˆåŠŸ: ERR_OK  å¤±è´¥ï¼šERR_NOT_EXIST --id ä¸å­˜åœ¨
  */
 sl_err_t timer_stop(sl_uint8_t timer_id);
 
 
-/**
- * @brief   ÐÞ¸ÄÖ¸¶¨id µÄ¶¨Ê±Æ÷¶ÔÏóµÄ¶¨Ê±ÖÜÆÚ
- * 
- * @param timer_id ´ýÐÞ¸ÄµÄ¶¨Ê±Æ÷¶ÔÏóid
- * @param period   ÐÂÉè¶¨µÄ¶¨Ê±Æ÷ÖÜÆÚÖµ£¬ µ¥Î»£º ms
- * @return sl_err_t ³É¹¦: ERR_OK  Ê§°Ü£ºERR_NOT_EXIST --id ²»´æÔÚ
- */
-sl_err_t timer_set_period(sl_uint8_t timer_id, sl_uint32_t  period);
-
 
 /**
- * @brief   ¸´Î»Ö¸¶¨id¶¨Ê±Æ÷¶ÔÏóµÄ¼ÆÊýÖµ£¬ÖØÐÂ¿ªÊ¼¼ÆÊ±
+ * @brief   å¤ä½æŒ‡å®šidå®šæ—¶å™¨å¯¹è±¡çš„è®¡æ•°å€¼ï¼Œé‡æ–°å¼€å§‹è®¡æ—¶
  * 
- * @param timer_id ´ý¸´Î»µÄµÄ¶¨Ê±Æ÷¶ÔÏóid
- * @return sl_err_t ³É¹¦: ERR_OK  Ê§°Ü£ºERR_NOT_EXIST --id ²»´æÔÚ
+ * @param timer_id å¾…å¤ä½çš„çš„å®šæ—¶å™¨å¯¹è±¡id
+ * @return sl_err_t æˆåŠŸ: ERR_OK  å¤±è´¥ï¼šERR_NOT_EXIST --id ä¸å­˜åœ¨
  */
 sl_err_t timer_reset(sl_uint8_t timer_id);
 
 
 /**
- * @brief ¶¨Ê±Æ÷ÈÎÎñÊ±¼ä×ßÊ±º¯Êý£¬ÐèÒª·ÅÔÚÏµÍ³¶¨Ê±Æ÷ÖÐ¶ÏÖÐµ÷ÓÃ
+ * @brief å®šæ—¶å™¨ä»»åŠ¡æ—¶é—´èµ°æ—¶å‡½æ•°ï¼Œéœ€è¦æ”¾åœ¨ç³»ç»Ÿå®šæ—¶å™¨ä¸­æ–­ä¸­è°ƒç”¨
  * 
  */
 void  timer_tick(void);
 
 /**
- * @brief ¶¨Ê±Æ÷ÊÂ¼þ¼à²âº¯Êý£¬ÐèÒª·ÅÔÚÖ÷Ñ­»·ÖÐµ÷ÓÃ£¬¼ì²â¶¨Ê±Æ÷³¬Ê±ÊÂ¼þ£¬²¢
- *        Ö´ÐÐÏìÓ¦»Øµ÷º¯Êý
+ * @brief å®šæ—¶å™¨äº‹ä»¶ç›‘æµ‹å‡½æ•°ï¼Œéœ€è¦æ”¾åœ¨ä¸»å¾ªçŽ¯ä¸­è°ƒç”¨ï¼Œæ£€æµ‹å®šæ—¶å™¨è¶…æ—¶äº‹ä»¶ï¼Œå¹¶
+ *        æ‰§è¡Œå“åº”å›žè°ƒå‡½æ•°
  */
 void  timer_task_loop(void);
 
